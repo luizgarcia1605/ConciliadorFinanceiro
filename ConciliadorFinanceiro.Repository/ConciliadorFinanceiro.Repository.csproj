@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ConciliadorFinanceiro.Base\ConciliadorFinanceiro.Base.csproj" />
+    <ProjectReference Include="..\ConciliadorFinanceiro.Util\ConciliadorFinanceiro.Util.csproj" />
   </ItemGroup>
 
 </Project>

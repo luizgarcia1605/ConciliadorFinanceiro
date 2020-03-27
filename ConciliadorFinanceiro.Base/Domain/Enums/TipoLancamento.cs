@@ -1,6 +1,6 @@
 ﻿namespace ConciliadorFinanceiro.Base.Domain.Enums
 {
-    public enum TipoLancamento
+    public enum TipoLancamento : int
     {
         Nenhum = 0,
         Debito = 1,
