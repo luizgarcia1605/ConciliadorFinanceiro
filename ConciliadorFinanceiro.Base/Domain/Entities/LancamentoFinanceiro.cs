@@ -1,5 +1,5 @@
-﻿using ConciliadorFinanceiro.Base.Domain.Enums;
-using System;
+﻿using System;
+using ConciliadorFinanceiro.Base.Domain.Enums;
 
 namespace ConciliadorFinanceiro.Base.Domain.Entities
 {

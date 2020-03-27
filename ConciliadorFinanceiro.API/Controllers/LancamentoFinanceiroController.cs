@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using ConciliadorFinanceiro.Base.Domain.Entities;
 using ConciliadorFinanceiro.Base.Domain.Enums;
 using ConciliadorFinanceiro.Base.Domain.Interfaces.InterfacesBusiness;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ConciliadorFinanceiro.API.Controllers
@@ -16,10 +15,16 @@ namespace ConciliadorFinanceiro.API.Controllers
     {
         private readonly ILancamentoFinanceiroBusiness _businessLancamento;
 
+        #region Construtores
+
         public LancamentoFinanceiroController(ILancamentoFinanceiroBusiness businessLancamento)
         {
             _businessLancamento = businessLancamento;
         }
+
+        #endregion
+
+        #region Post
 
         [HttpPost]
         public async Task<ActionResult<LancamentoFinanceiro>> Cadastrar(LancamentoFinanceiro lancamentoFinanceiro)
@@ -35,6 +40,10 @@ namespace ConciliadorFinanceiro.API.Controllers
             return Ok(lancamentoFinanceiro);
         }
 
+        #endregion
+
+        #region Put
+
         [HttpPut]
         public async Task<IActionResult> Editar(LancamentoFinanceiro lancamentoFinanceiro)
         {
@@ -42,7 +51,7 @@ namespace ConciliadorFinanceiro.API.Controllers
                 return NotFound();
 
             var lancamentoAtualizar = await _businessLancamento.Consultar(lancamentoFinanceiro);
-            
+
             if (lancamentoAtualizar.Status == StatusLancamento.Conciliado)
                 return BadRequest();
 
@@ -55,12 +64,20 @@ namespace ConciliadorFinanceiro.API.Controllers
             return Ok(lancamentoAtualizar);
         }
 
+        #endregion
+
+        #region Delete
+
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<LancamentoFinanceiro>> Deletar(int id)
         {
-            await _businessLancamento.Deletar(id);
+            await _businessLancamento.Deletar(new LancamentoFinanceiro() { Id = id });
             return Ok();
         }
+
+        #endregion
+
+        #region Get
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<LancamentoFinanceiro>> Consultar(int id)
@@ -79,5 +96,8 @@ namespace ConciliadorFinanceiro.API.Controllers
             var lancamentos = await _businessLancamento.ConsultarLista();
             return lancamentos.AsEnumerable();
         }
+
+        #endregion
+
     }
 }

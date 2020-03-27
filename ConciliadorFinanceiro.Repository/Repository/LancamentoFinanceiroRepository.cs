@@ -8,6 +8,6 @@ namespace ConciliadorFinanceiro.Repository.Repository
 {
     public class LancamentoFinanceiroRepository : BaseRepository<LancamentoFinanceiro>, ILancamentoFinanceiroRepository
     {
-        public LancamentoFinanceiroRepository() : base() { }
+        public LancamentoFinanceiroRepository(IDatabase database) : base(database) { }
     }
 }

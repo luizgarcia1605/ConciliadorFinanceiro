@@ -9,40 +9,41 @@ namespace ConciliadorFinanceiro.Repository
 {
     public abstract class BaseRepository<T> : IRepository<T>
     {
+        private readonly IDatabase _database;
+
+        public BaseRepository(IDatabase database)
+        {
+            _database = database;
+        }
+
         public virtual async Task<int> Cadastrar(T model)
         {
-            using (var db = new SqlDatabase<T>())
-                return await db.Cadastrar(model);
+            return await _database.Cadastrar(model);
         }
 
         public virtual async Task<int> Editar(T model)
         {
-            using (var db = new SqlDatabase<T>())
-                return await db.Editar(model);
+            return await _database.Editar(model);
         }
 
-        public virtual async Task<int> Deletar(int id)
+        public virtual async Task<int> Deletar(T model)
         {
-            using (var db = new SqlDatabase<T>())
-                return await db.Deletar(id);
+            return await _database.Deletar(model);
         }
 
         public virtual async Task<T> Consultar(T model)
         {
-            using (var db = new SqlDatabase<T>())
-                return await db.Consultar(model);
+            return await _database.Consultar(model);
         }
 
         public virtual async Task<List<T>> ConsultarLista(T model)
         {
-            using (var db = new SqlDatabase<T>())
-                return await db.ConsultarLista(model);
+            return await _database.ConsultarLista(model);
         }
 
         public virtual async Task<List<T>> ConsultarLista()
         {
-            using (var db = new SqlDatabase<T>())
-                return await db.ConsultarLista();
+            return await _database.ConsultarLista<T>();
         }
 
         public virtual void Dispose()

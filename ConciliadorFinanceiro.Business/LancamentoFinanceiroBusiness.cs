@@ -29,7 +29,12 @@ namespace ConciliadorFinanceiro.Business
 
         public async Task<int> Deletar(int id)
         {
-            return await _repositorioLancamento.Deletar(id);
+            return await _repositorioLancamento.Deletar(new LancamentoFinanceiro() { Id = id });
+        }
+
+        public async Task<int> Deletar(LancamentoFinanceiro model)
+        {
+            return await _repositorioLancamento.Deletar(model);
         }
 
         public async Task<LancamentoFinanceiro> Consultar(int id)
