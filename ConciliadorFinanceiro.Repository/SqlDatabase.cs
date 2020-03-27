@@ -1,5 +1,6 @@
 ﻿using ConciliadorFinanceiro.Base.Domain.Interfaces.InterfacesRepository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer.Infrastructure.Internal;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -18,20 +19,11 @@ namespace ConciliadorFinanceiro.Repository
         {
             _scnConexao = new SqlConnection
             {
-                //TODO: ver como pegar a string de conexão da API
-                ConnectionString = ""
-
+                ConnectionString = options.FindExtension<SqlServerOptionsExtension>().ConnectionString
             };
-
-            var teste = options;
 
             Conectar();
         }
-
-        //private static DbContextOptions GetOptions(string connectionString)
-        //{
-        //    return SqlServerDbContextOptionsExtensions.UseSqlServer(new DbContextOptionsBuilder(), connectionString).Options;
-        //}
 
         public Task<bool> Conectar()
         {
