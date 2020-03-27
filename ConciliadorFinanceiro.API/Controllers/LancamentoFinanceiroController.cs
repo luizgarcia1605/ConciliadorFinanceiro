@@ -72,6 +72,11 @@ namespace ConciliadorFinanceiro.API.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<LancamentoFinanceiro>> Deletar(int id)
         {
+            var lancamentoDeletar = await _businessLancamento.Consultar(id);
+
+            if (lancamentoDeletar.Status == (int)StatusLancamento.Conciliado)
+                return BadRequest();
+
             await _businessLancamento.Deletar(new LancamentoFinanceiro() { Id = id });
             return Ok();
         }

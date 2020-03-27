@@ -123,22 +123,58 @@ namespace ConciliadorFinanceiro.Repository
 
         public Task<int> Deletar<T>(T model)
         {
-            throw new NotImplementedException();
+            var tabela = typeof(T).Name;
+            var mapa = Mapper.MapearClasseDB(model, out string campoId);
+
+            var id = mapa.Where(k => k.Key == campoId).FirstOrDefault();
+            var where = $"{id.Key} = {id.Value}";
+
+            var comando = $@"DELETE FROM {tabela} WHERE {where}";
+            var scmComando = new SqlCommand(comando, _scnConexao);
+            scmComando.ExecuteNonQuery();
+
+            return new Task<int>(() => Convert.ToInt32(id.Value));
         }
 
         public Task<T> Consultar<T>(T model)
         {
-            throw new NotImplementedException();
+            return new Task<T>(() => Consultar(model, true).FirstOrDefault());
         }
 
         public Task<List<T>> ConsultarLista<T>(T model)
         {
-            throw new NotImplementedException();
+            return new Task<List<T>>(() => Consultar(model, true));
         }
 
         public Task<List<T>> ConsultarLista<T>()
         {
+            //return new Task<List<T>>(() => Consultar<T>(null, false));
             throw new NotImplementedException();
+        }
+
+        private List<T> Consultar<T>(T model, bool filtrar)
+        {
+            var datTabela = new DataTable();
+            var tabela = typeof(T).Name;
+            var where = string.Empty;
+            var mapa = Mapper.MapearClasseDB(model, out string campoId);
+
+            var id = mapa.Where(k => k.Key == campoId).FirstOrDefault();
+
+            if (filtrar)
+                where = $"WHERE {id.Key} = {id.Value}";
+
+            var campos = String.Join(',', mapa.Keys.ToList());
+
+            var comando = $@"SELECT {campos} FROM {tabela} {where}";
+            var scmComando = new SqlCommand(comando, _scnConexao);
+            var sdaAdaptador = new SqlDataAdapter(scmComando);
+            sdaAdaptador.Fill(datTabela);
+
+            var json = JsonConvert.SerializeObject(datTabela);
+            var retorno = JsonConvert.DeserializeObject<List<T>>(json);
+
+            return retorno;
         }
 
         public override void Dispose()
