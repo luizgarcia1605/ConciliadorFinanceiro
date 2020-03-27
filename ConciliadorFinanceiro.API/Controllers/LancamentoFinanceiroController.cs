@@ -13,6 +13,7 @@ namespace ConciliadorFinanceiro.API.Controllers
     [ApiController]
     public class LancamentoFinanceiroController : ControllerBase
     {
+        //TODO: fazer as saídas dos try-catchs
         private readonly ILancamentoFinanceiroBusiness _businessLancamento;
 
         #region Construtores

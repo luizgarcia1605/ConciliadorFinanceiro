@@ -1,4 +1,5 @@
 ﻿using ConciliadorFinanceiro.Base.Domain.Interfaces.InterfacesRepository;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,20 +10,28 @@ using System.Threading.Tasks;
 
 namespace ConciliadorFinanceiro.Repository
 {
-    public class SqlDatabase : IDatabase
+    public class SqlDatabase : DbContext, IDatabase
     {
         private readonly SqlConnection _scnConexao;
 
-        public SqlDatabase()
+        public SqlDatabase(DbContextOptions<SqlDatabase> options) : base(options)
         {
             _scnConexao = new SqlConnection
             {
                 //TODO: ver como pegar a string de conexão da API
                 ConnectionString = ""
+
             };
+
+            var teste = options;
 
             Conectar();
         }
+
+        //private static DbContextOptions GetOptions(string connectionString)
+        //{
+        //    return SqlServerDbContextOptionsExtensions.UseSqlServer(new DbContextOptionsBuilder(), connectionString).Options;
+        //}
 
         public Task<bool> Conectar()
         {
@@ -84,7 +93,7 @@ namespace ConciliadorFinanceiro.Repository
             throw new NotImplementedException();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             Desconectar();
         }

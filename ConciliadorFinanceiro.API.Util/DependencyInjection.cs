@@ -1,6 +1,6 @@
-﻿using ConciliadorFinanceiro.Base.Domain.Entities;
-using ConciliadorFinanceiro.Base.Domain.Interfaces.InterfacesBusiness;
+﻿using ConciliadorFinanceiro.Base.Domain.Interfaces.InterfacesBusiness;
 using ConciliadorFinanceiro.Base.Domain.Interfaces.InterfacesRepository;
+using ConciliadorFinanceiro.Business;
 using ConciliadorFinanceiro.Repository;
 using ConciliadorFinanceiro.Repository.Repository;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ConciliadorFinanceiro.Business
+namespace ConciliadorFinanceiro.API.Util
 {
     public static class DependencyInjection
     {
