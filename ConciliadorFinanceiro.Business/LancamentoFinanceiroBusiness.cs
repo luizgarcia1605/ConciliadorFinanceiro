@@ -1,4 +1,5 @@
 ﻿using ConciliadorFinanceiro.Base.Domain.Entities;
+using ConciliadorFinanceiro.Base.Domain.Enums;
 using ConciliadorFinanceiro.Base.Domain.Interfaces.InterfacesBusiness;
 using ConciliadorFinanceiro.Base.Domain.Interfaces.InterfacesRepository;
 using System;
@@ -19,21 +20,45 @@ namespace ConciliadorFinanceiro.Business
 
         public async Task<int> Cadastrar(LancamentoFinanceiro model)
         {
+            if (model != null)
+                model.DataHoraLancamento = DateTime.Now;
+            else
+                throw new ArgumentException("Objeto vazio");
+
             return await _repositorioLancamento.Cadastrar(model);
         }
 
         public async Task<int> Editar(LancamentoFinanceiro model)
         {
-            return await _repositorioLancamento.Editar(model);
+            var modelAtualizar = await Consultar(model);
+
+            if (modelAtualizar == null || modelAtualizar.Status == (int)StatusLancamento.Conciliado)
+                throw new ArgumentException("Objeto vazio ou já conciliado");
+
+            modelAtualizar.Valor = model.Valor;
+            modelAtualizar.Tipo = model.Tipo;
+            modelAtualizar.Status = model.Status;
+
+            return await _repositorioLancamento.Editar(modelAtualizar);
         }
 
         public async Task<int> Deletar(int id)
         {
+            var modelDeletar = await Consultar(id);
+
+            if (modelDeletar == null || modelDeletar.Status == (int)StatusLancamento.Conciliado)
+                throw new ArgumentException("Objeto vazio ou já conciliado");
+
             return await _repositorioLancamento.Deletar(new LancamentoFinanceiro() { Id = id });
         }
 
         public async Task<int> Deletar(LancamentoFinanceiro model)
         {
+            var modelDeletar = await Consultar(model);
+
+            if (modelDeletar == null || modelDeletar.Status == (int)StatusLancamento.Conciliado)
+                throw new ArgumentException("Objeto vazio ou já conciliado");
+
             return await _repositorioLancamento.Deletar(model);
         }
 

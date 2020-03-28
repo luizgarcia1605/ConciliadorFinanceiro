@@ -30,15 +30,20 @@ namespace ConciliadorFinanceiro.API.Controllers
         [HttpPost]
         public async Task<ActionResult<LancamentoFinanceiro>> Cadastrar(LancamentoFinanceiro lancamentoFinanceiro)
         {
-            if (!ModelState.IsValid)
-                return NotFound();
+            try
+            {
+                if (!ModelState.IsValid)
+                    return ValidationProblem();
 
-            if (lancamentoFinanceiro != null)
-                lancamentoFinanceiro.DataHoraLancamento = DateTime.Now;
+                await _businessLancamento.Cadastrar(lancamentoFinanceiro);
 
-            await _businessLancamento.Cadastrar(lancamentoFinanceiro);
-
-            return Ok(lancamentoFinanceiro);
+                return Ok(lancamentoFinanceiro);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Error", ex.Message);
+                return BadRequest(ModelState);
+            }
         }
 
         #endregion
@@ -48,21 +53,20 @@ namespace ConciliadorFinanceiro.API.Controllers
         [HttpPut]
         public async Task<IActionResult> Editar(LancamentoFinanceiro lancamentoFinanceiro)
         {
-            if (!ModelState.IsValid)
-                return NotFound();
+            try
+            {
+                if (!ModelState.IsValid)
+                    return ValidationProblem();
 
-            var lancamentoAtualizar = await _businessLancamento.Consultar(lancamentoFinanceiro);
+                await _businessLancamento.Editar(lancamentoFinanceiro);
 
-            if (lancamentoAtualizar == null || lancamentoAtualizar.Status == (int)StatusLancamento.Conciliado)
-                return BadRequest();
-
-            lancamentoAtualizar.Valor = lancamentoFinanceiro.Valor;
-            lancamentoAtualizar.Tipo = lancamentoFinanceiro.Tipo;
-            lancamentoAtualizar.Status = lancamentoFinanceiro.Status;
-
-            await _businessLancamento.Editar(lancamentoAtualizar);
-
-            return Ok(lancamentoAtualizar);
+                return Ok(lancamentoFinanceiro);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Error", ex.Message);
+                return BadRequest(ModelState);
+            }
         }
 
         #endregion
@@ -72,13 +76,16 @@ namespace ConciliadorFinanceiro.API.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<LancamentoFinanceiro>> Deletar(int id)
         {
-            var lancamentoDeletar = await _businessLancamento.Consultar(id);
-
-            if (lancamentoDeletar.Status == (int)StatusLancamento.Conciliado)
-                return BadRequest();
-
-            await _businessLancamento.Deletar(new LancamentoFinanceiro() { Id = id });
-            return Ok();
+            try
+            {
+                await _businessLancamento.Deletar(new LancamentoFinanceiro() { Id = id });
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Error", ex.Message);
+                return BadRequest(ModelState);
+            }
         }
 
         #endregion
