@@ -15,5 +15,6 @@ namespace ConciliadorFinanceiro.Base.Domain.Interfaces.InterfacesRepository
         Task<T> Consultar<T>(T model);
         Task<List<T>> ConsultarLista<T>(T model);
         Task<List<T>> ConsultarLista<T>();
+        Task<List<T>> ConsultarLista<T>(List<string> condicoes);
     }
 }

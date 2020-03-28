@@ -46,6 +46,11 @@ namespace ConciliadorFinanceiro.Repository
             return await _database.ConsultarLista<T>();
         }
 
+        public virtual async Task<List<T>> ConsultarLista(List<string> condicoes)
+        {
+            return await _database.ConsultarLista<T>(condicoes);
+        }
+
         public virtual void Dispose()
         {
         }

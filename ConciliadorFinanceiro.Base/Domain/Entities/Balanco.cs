@@ -2,7 +2,7 @@
 
 namespace ConciliadorFinanceiro.Base.Domain.Entities
 {
-    public class BalancoDia
+    public class Balanco
     {
         public DateTime DataBalanco { get; set; }
         public decimal ValorTotalCredito { get; set; }

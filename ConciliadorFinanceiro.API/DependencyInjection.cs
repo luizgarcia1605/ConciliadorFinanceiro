@@ -17,6 +17,7 @@ namespace ConciliadorFinanceiro.API.Util
         {
             services.AddScoped<ILancamentoFinanceiroRepository, LancamentoFinanceiroRepository>();
             services.AddScoped<ILancamentoFinanceiroBusiness, LancamentoFinanceiroBusiness>();
+            services.AddScoped<IBalancoBusiness, BalancoBusiness>();
             services.AddScoped<IDatabase, SqlDatabase>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

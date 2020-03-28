@@ -82,5 +82,10 @@ namespace ConciliadorFinanceiro.Business
             return await _repositorioLancamento.ConsultarLista();
         }
 
+        public async Task<List<LancamentoFinanceiro>> ConsultarLista(List<string> condicoes)
+        {
+            return await _repositorioLancamento.ConsultarLista(condicoes);
+        }
+
     }
 }

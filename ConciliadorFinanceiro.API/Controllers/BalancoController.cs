@@ -14,29 +14,57 @@ namespace ConciliadorFinanceiro.API.Controllers
     public class BalancoController : ControllerBase
     {
         private readonly ILancamentoFinanceiroBusiness _businessLancamento;
+        private readonly IBalancoBusiness _businessBalanco;
 
         #region Construtores
 
-        public BalancoController(ILancamentoFinanceiroBusiness businessLancamento)
+        public BalancoController(ILancamentoFinanceiroBusiness businessLancamento,
+                                    IBalancoBusiness businessBalanco)
         {
             _businessLancamento = businessLancamento;
+            _businessBalanco = businessBalanco;
         }
 
         #endregion
 
         #region Post
 
-        [HttpPost]
-        public async Task<ActionResult<LancamentoFinanceiro>> Cadastrar(LancamentoFinanceiro lancamentoFinanceiro)
+        [HttpGet("BalancoDiario")]
+        public async Task<ActionResult<Balanco>> BalancoDiario(DateTime data)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return ValidationProblem();
 
-                await _businessLancamento.Cadastrar(lancamentoFinanceiro);
+                var lancamentosDia = await _businessLancamento.ConsultarLista
+                    (new List<string> { $"CAST(DataHoraLancamento AS DATE) = '{data:yyyy-MM-dd}'" });
 
-                return Ok(lancamentoFinanceiro);
+                var balancoDia = await _businessBalanco.GerarBalancoDiario(lancamentosDia);
+
+                return Ok(lancamentosDia);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Error", ex.Message);
+                return BadRequest(ModelState);
+            }
+        }
+
+        [HttpGet("BalancoMensal")]
+        public async Task<ActionResult<Balanco>> BalancoMensal(DateTime datainicio, DateTime datafinal)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return ValidationProblem();
+
+                var lancamentosDia = await _businessLancamento.ConsultarLista
+                    (new List<string> { $"CAST(DataHoraLancamento AS DATE) BETWEEN '{datainicio:yyyy-MM-dd}' AND '{datafinal:yyyy-MM-dd}'" });
+
+                var balancoDia = await _businessBalanco.GerarBalancoMensal(lancamentosDia);
+
+                return Ok(lancamentosDia);
             }
             catch (Exception ex)
             {

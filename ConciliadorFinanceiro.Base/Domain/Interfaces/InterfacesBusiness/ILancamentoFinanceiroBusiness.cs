@@ -16,5 +16,6 @@ namespace ConciliadorFinanceiro.Base.Domain.Interfaces.InterfacesBusiness
         Task<LancamentoFinanceiro> Consultar(LancamentoFinanceiro model);
         Task<List<LancamentoFinanceiro>> ConsultarLista(LancamentoFinanceiro model);
         Task<List<LancamentoFinanceiro>> ConsultarLista();
+        Task<List<LancamentoFinanceiro>> ConsultarLista(List<string> condicoes);
     }
 }

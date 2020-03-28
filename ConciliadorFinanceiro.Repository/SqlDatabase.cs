@@ -152,6 +152,11 @@ namespace ConciliadorFinanceiro.Repository
             return await Task.FromResult(Consultar<T>());
         }
 
+        public async Task<List<T>> ConsultarLista<T>(List<string> condicoes)
+        {
+            return await Task.FromResult(Consultar<T>(condicoes));
+        }
+
         private List<T> Consultar<T>(T model, bool filtrar)
         {
             var datTabela = new DataTable();
@@ -177,12 +182,17 @@ namespace ConciliadorFinanceiro.Repository
             return retorno;
         }
 
-        private List<T> Consultar<T>()
+        private List<T> Consultar<T>(List<string> condicoes = null)
         {
             var datTabela = new DataTable();
             var tabela = typeof(T).Name;
+            var where = string.Empty;
 
-            var comando = $@"SELECT * FROM {tabela}";
+            if (condicoes != null && condicoes.Count != 0)
+                where = $"WHERE {String.Join(" AND ", condicoes)}";
+
+            var comando = $@"SELECT * FROM {tabela} {where}";
+
             var scmComando = new SqlCommand(comando, _scnConexao);
             var sdaAdaptador = new SqlDataAdapter(scmComando);
             sdaAdaptador.Fill(datTabela);
