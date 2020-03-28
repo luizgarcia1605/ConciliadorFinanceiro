@@ -148,8 +148,7 @@ namespace ConciliadorFinanceiro.Repository
 
         public async Task<List<T>> ConsultarLista<T>()
         {
-            //return await Task.FromResult(Consultar<T>(null, false));
-            throw new NotImplementedException();
+            return await Task.FromResult(Consultar<T>());
         }
 
         private List<T> Consultar<T>(T model, bool filtrar)
@@ -167,6 +166,22 @@ namespace ConciliadorFinanceiro.Repository
             var campos = String.Join(',', mapa.Keys.ToList());
 
             var comando = $@"SELECT {campos} FROM {tabela} {where}";
+            var scmComando = new SqlCommand(comando, _scnConexao);
+            var sdaAdaptador = new SqlDataAdapter(scmComando);
+            sdaAdaptador.Fill(datTabela);
+
+            var json = JsonConvert.SerializeObject(datTabela);
+            var retorno = JsonConvert.DeserializeObject<List<T>>(json);
+
+            return retorno;
+        }
+
+        private List<T> Consultar<T>()
+        {
+            var datTabela = new DataTable();
+            var tabela = typeof(T).Name;
+
+            var comando = $@"SELECT * FROM {tabela}";
             var scmComando = new SqlCommand(comando, _scnConexao);
             var sdaAdaptador = new SqlDataAdapter(scmComando);
             sdaAdaptador.Fill(datTabela);

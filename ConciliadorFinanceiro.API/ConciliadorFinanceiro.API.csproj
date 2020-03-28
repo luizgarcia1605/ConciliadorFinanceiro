@@ -19,8 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ConciliadorFinanceiro.API.Util\ConciliadorFinanceiro.API.Util.csproj" />
     <ProjectReference Include="..\ConciliadorFinanceiro.Base\ConciliadorFinanceiro.Base.csproj" />
+    <ProjectReference Include="..\ConciliadorFinanceiro.Business\ConciliadorFinanceiro.Business.csproj" />
+    <ProjectReference Include="..\ConciliadorFinanceiro.Repository\ConciliadorFinanceiro.Repository.csproj" />
   </ItemGroup>
 
 </Project>
