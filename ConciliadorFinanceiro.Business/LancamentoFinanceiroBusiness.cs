@@ -20,10 +20,10 @@ namespace ConciliadorFinanceiro.Business
 
         public async Task<int> Cadastrar(LancamentoFinanceiro model)
         {
-            if (model != null)
-                model.DataHoraLancamento = DateTime.Now;
-            else
+            if (model == null)
                 throw new ArgumentException("Objeto vazio");
+
+            model.DataHoraLancamento = DateTime.Now;
 
             return await _repositorioLancamento.Cadastrar(model);
         }
