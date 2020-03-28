@@ -58,7 +58,7 @@ namespace ConciliadorFinanceiro.Repository
             }
         }
 
-        public Task<int> Cadastrar<T>(T model)
+        public async Task<int> Cadastrar<T>(T model)
         {
             try
             {
@@ -77,7 +77,7 @@ namespace ConciliadorFinanceiro.Repository
                 comando = "SELECT @@Identity";
                 scmComando = new SqlCommand(comando, _scnConexao);
 
-                return new Task<int>(() => int.Parse(scmComando.ExecuteScalar().ToString()));
+                return await Task.FromResult(int.Parse(scmComando.ExecuteScalar().ToString()));
             }
             catch (SqlException ex)
             {
@@ -89,7 +89,7 @@ namespace ConciliadorFinanceiro.Repository
             }
         }
 
-        public Task<int> Editar<T>(T model)
+        public async Task<int> Editar<T>(T model)
         {
             try
             {
@@ -109,7 +109,7 @@ namespace ConciliadorFinanceiro.Repository
                 var scmComando = new SqlCommand(comando, _scnConexao);
                 scmComando.ExecuteNonQuery();
 
-                return new Task<int>(() => Convert.ToInt32(id.Value));
+                return await Task.FromResult(Convert.ToInt32(id.Value));
             }
             catch (SqlException ex)
             {
@@ -121,7 +121,7 @@ namespace ConciliadorFinanceiro.Repository
             }
         }
 
-        public Task<int> Deletar<T>(T model)
+        public async Task<int> Deletar<T>(T model)
         {
             var tabela = typeof(T).Name;
             var mapa = Mapper.MapearClasseDB(model, out string campoId);
@@ -133,22 +133,22 @@ namespace ConciliadorFinanceiro.Repository
             var scmComando = new SqlCommand(comando, _scnConexao);
             scmComando.ExecuteNonQuery();
 
-            return new Task<int>(() => Convert.ToInt32(id.Value));
+            return await Task.FromResult(Convert.ToInt32(id.Value));
         }
 
-        public Task<T> Consultar<T>(T model)
+        public async Task<T> Consultar<T>(T model)
         {
-            return new Task<T>(() => Consultar(model, true).FirstOrDefault());
+            return await Task.FromResult(Consultar(model, true).FirstOrDefault());
         }
 
-        public Task<List<T>> ConsultarLista<T>(T model)
+        public async Task<List<T>> ConsultarLista<T>(T model)
         {
-            return new Task<List<T>>(() => Consultar(model, true));
+            return await Task.FromResult(Consultar(model, true));
         }
 
-        public Task<List<T>> ConsultarLista<T>()
+        public async Task<List<T>> ConsultarLista<T>()
         {
-            //return new Task<List<T>>(() => Consultar<T>(null, false));
+            //return await Task.FromResult(Consultar<T>(null, false));
             throw new NotImplementedException();
         }
 

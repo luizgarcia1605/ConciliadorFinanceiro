@@ -48,7 +48,7 @@ namespace ConciliadorFinanceiro.Repository
 
         public virtual void Dispose()
         {
-            this.Dispose();
+            //this.Dispose();
         }
 
     }

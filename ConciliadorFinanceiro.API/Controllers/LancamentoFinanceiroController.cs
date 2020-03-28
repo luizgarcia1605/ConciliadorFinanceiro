@@ -53,7 +53,7 @@ namespace ConciliadorFinanceiro.API.Controllers
 
             var lancamentoAtualizar = await _businessLancamento.Consultar(lancamentoFinanceiro);
 
-            if (lancamentoAtualizar.Status == (int)StatusLancamento.Conciliado)
+            if (lancamentoAtualizar == null || lancamentoAtualizar.Status == (int)StatusLancamento.Conciliado)
                 return BadRequest();
 
             lancamentoAtualizar.Valor = lancamentoFinanceiro.Valor;
