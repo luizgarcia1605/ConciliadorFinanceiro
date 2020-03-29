@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 
 namespace ConciliadorFinanceiro.Repository
 {
-    //TODO: passar os bangs como parâmetro para evitar sql injection
     public class SqlDatabase : DbContext, IDatabase
     {
         private readonly SqlConnection _scnConexao;

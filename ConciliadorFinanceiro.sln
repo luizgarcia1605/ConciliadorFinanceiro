@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Util", "Util", "{0E93CCD8-9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConciliadorFinanceiro.Util", "ConciliadorFinanceiro.Util\ConciliadorFinanceiro.Util.csproj", "{33A23A64-2478-437F-8E38-BF95DDE2C251}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConciliadorFinanceiro.Web", "ConciliadorFinanceiro.Web\ConciliadorFinanceiro.Web.csproj", "{AF81D387-E933-417D-A5B3-33084519125C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{33A23A64-2478-437F-8E38-BF95DDE2C251}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33A23A64-2478-437F-8E38-BF95DDE2C251}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33A23A64-2478-437F-8E38-BF95DDE2C251}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF81D387-E933-417D-A5B3-33084519125C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF81D387-E933-417D-A5B3-33084519125C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF81D387-E933-417D-A5B3-33084519125C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF81D387-E933-417D-A5B3-33084519125C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +67,7 @@ Global
 		{FB35CD6C-8179-49E0-9549-AC49D05A44FD} = {3A669141-349D-4837-8A2B-B8A63FBFE0F6}
 		{090C516C-4786-4808-91CD-B6F3C6B0F06A} = {CD70491F-769B-4185-B148-88CFF424FCB3}
 		{33A23A64-2478-437F-8E38-BF95DDE2C251} = {0E93CCD8-9BCC-4783-9CEC-FF5FB5671306}
+		{AF81D387-E933-417D-A5B3-33084519125C} = {99BF60B6-55FB-4BDC-AA1C-970FF79B938B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {08A4EA48-6E4E-4C71-B856-11DA293E2CEA}
