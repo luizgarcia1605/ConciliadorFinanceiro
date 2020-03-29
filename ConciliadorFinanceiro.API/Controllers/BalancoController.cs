@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using ConciliadorFinanceiro.Base.Domain.Entities;
 using ConciliadorFinanceiro.Base.Domain.Interfaces.InterfacesBusiness;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ConciliadorFinanceiro.API.Controllers
@@ -27,7 +25,7 @@ namespace ConciliadorFinanceiro.API.Controllers
 
         #endregion
 
-        #region Post
+        #region Get
 
         [HttpGet("BalancoDiario")]
         public async Task<ActionResult<Balanco>> BalancoDiario(DateTime data)
@@ -42,7 +40,7 @@ namespace ConciliadorFinanceiro.API.Controllers
 
                 var balancoDia = await _businessBalanco.GerarBalancoDiario(lancamentosDia);
 
-                return Ok(lancamentosDia);
+                return Ok(balancoDia);
             }
             catch (Exception ex)
             {
@@ -51,8 +49,8 @@ namespace ConciliadorFinanceiro.API.Controllers
             }
         }
 
-        [HttpGet("BalancoMensal")]
-        public async Task<ActionResult<Balanco>> BalancoMensal(DateTime datainicio, DateTime datafinal)
+        [HttpGet("BalancoPeriodo")]
+        public async Task<ActionResult<Balanco>> BalancoPeriodo(DateTime datainicio, DateTime datafinal)
         {
             try
             {
@@ -62,9 +60,9 @@ namespace ConciliadorFinanceiro.API.Controllers
                 var lancamentosDia = await _businessLancamento.ConsultarLista
                     (new List<string> { $"CAST(DataHoraLancamento AS DATE) BETWEEN '{datainicio:yyyy-MM-dd}' AND '{datafinal:yyyy-MM-dd}'" });
 
-                var balancoDia = await _businessBalanco.GerarBalancoMensal(lancamentosDia);
+                var balancoDia = await _businessBalanco.GerarBalancoPeriodo(lancamentosDia);
 
-                return Ok(lancamentosDia);
+                return Ok(balancoDia);
             }
             catch (Exception ex)
             {
@@ -74,5 +72,6 @@ namespace ConciliadorFinanceiro.API.Controllers
         }
 
         #endregion
+
     }
 }

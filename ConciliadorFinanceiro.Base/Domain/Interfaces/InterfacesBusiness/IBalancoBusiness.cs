@@ -9,6 +9,6 @@ namespace ConciliadorFinanceiro.Base.Domain.Interfaces.InterfacesBusiness
     public interface IBalancoBusiness
     {
         Task<List<Balanco>> GerarBalancoDiario(List<LancamentoFinanceiro> lancamentosFinanceiros);
-        Task<List<Balanco>> GerarBalancoMensal(List<LancamentoFinanceiro> lancamentosFinanceiros);
+        Task<List<Balanco>> GerarBalancoPeriodo(List<LancamentoFinanceiro> lancamentosFinanceiros);
     }
 }

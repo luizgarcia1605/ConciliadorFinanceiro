@@ -8,5 +8,6 @@ namespace ConciliadorFinanceiro.Base.Domain.Entities
         public decimal ValorTotalCredito { get; set; }
         public decimal ValorTotalDebito { get; set; }
         public decimal ValorSaldo { get; set; }
+        public decimal FluxoCaixa { get; set; }
     }
 }

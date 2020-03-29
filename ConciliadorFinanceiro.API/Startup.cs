@@ -37,7 +37,7 @@ namespace ConciliadorFinanceiro.API
                 {
                     Title = "Conciliador Financeiro - API",
                     Version = "v1",
-                    Description = "Teste de competênca - Itaú GAD - Luiz Rodrigues"
+                    Description = "Teste de competência - Itaú GAD - Luiz Rodrigues"
                 });
             });
 

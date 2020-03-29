@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ConciliadorFinanceiro.Base.Domain.Entities;
-using ConciliadorFinanceiro.Base.Domain.Enums;
 using ConciliadorFinanceiro.Base.Domain.Interfaces.InterfacesBusiness;
 using Microsoft.AspNetCore.Mvc;
 

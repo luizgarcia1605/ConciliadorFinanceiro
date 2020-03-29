@@ -34,7 +34,7 @@ namespace ConciliadorFinanceiro.Business
                 }
 
                 saldoAnterior += balancoDia.ValorSaldo;
-                balancoDia.ValorSaldo = saldoAnterior;
+                balancoDia.FluxoCaixa = saldoAnterior;
 
                 balancoDia.DataBalanco = lancamento.DataHoraLancamento;
 
@@ -44,20 +44,28 @@ namespace ConciliadorFinanceiro.Business
             return await Task.FromResult(balancoDiario);
         }
 
-        public async Task<List<Balanco>> GerarBalancoMensal(List<LancamentoFinanceiro> lancamentosFinanceiros)
+        public async Task<List<Balanco>> GerarBalancoPeriodo(List<LancamentoFinanceiro> lancamentosFinanceiros)
         {
-            var balancoDiario = await GerarBalancoDiario(lancamentosFinanceiros);
+            var balancosDiarios = await GerarBalancoDiario(lancamentosFinanceiros);
 
-            balancoDiario = balancoDiario.GroupBy(b => b.DataBalanco.ToString("yyyy-MM-dd"))
-                                            .Select(g => new Balanco()
-                                            {
-                                                DataBalanco = Convert.ToDateTime(g.First().DataBalanco.ToString("yyyy-MM-dd")),
-                                                ValorTotalCredito = g.Sum(s => s.ValorTotalCredito),
-                                                ValorTotalDebito = g.Sum(s => s.ValorTotalDebito),
-                                                ValorSaldo = g.Sum(s => s.ValorTotalCredito) - g.Sum(s => s.ValorTotalDebito),
-                                            }).ToList();
+            balancosDiarios = balancosDiarios.GroupBy(b => b.DataBalanco.ToString("yyyy-MM-dd"))
+                                                .Select(g => new Balanco()
+                                                {
+                                                    DataBalanco = Convert.ToDateTime(g.First().DataBalanco.ToString("yyyy-MM-dd")),
+                                                    ValorTotalCredito = g.Sum(s => s.ValorTotalCredito),
+                                                    ValorTotalDebito = g.Sum(s => s.ValorTotalDebito),
+                                                    ValorSaldo = g.Sum(s => s.ValorTotalCredito) - g.Sum(s => s.ValorTotalDebito),
+                                                }).ToList();
 
-            return await Task.FromResult(balancoDiario);
+            var saldoAnterior = 0M;
+
+            foreach (var balanco in balancosDiarios)
+            {
+                saldoAnterior += balanco.ValorSaldo;
+                balanco.FluxoCaixa = saldoAnterior;
+            }
+
+            return await Task.FromResult(balancosDiarios);
         }
     }
 }
