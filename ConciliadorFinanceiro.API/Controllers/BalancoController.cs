@@ -28,7 +28,7 @@ namespace ConciliadorFinanceiro.API.Controllers
         #region Get
 
         [HttpGet("BalancoDiario")]
-        public async Task<ActionResult<Balanco>> BalancoDiario(DateTime data)
+        public async Task<ActionResult<Balanco>> BalancoDiario(string data)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace ConciliadorFinanceiro.API.Controllers
         }
 
         [HttpGet("BalancoPeriodo")]
-        public async Task<ActionResult<Balanco>> BalancoPeriodo(DateTime datainicio, DateTime datafinal)
+        public async Task<ActionResult<Balanco>> BalancoPeriodo(string datainicio, string datafinal)
         {
             try
             {

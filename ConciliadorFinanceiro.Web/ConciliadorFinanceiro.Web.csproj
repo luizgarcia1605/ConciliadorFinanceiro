@@ -17,11 +17,6 @@
 
 
   <ItemGroup>
-    <Folder Include="Views\Balanco\" />
-  </ItemGroup>
-
-
-  <ItemGroup>
     <ProjectReference Include="..\ConciliadorFinanceiro.Base\ConciliadorFinanceiro.Base.csproj" />
   </ItemGroup>
 

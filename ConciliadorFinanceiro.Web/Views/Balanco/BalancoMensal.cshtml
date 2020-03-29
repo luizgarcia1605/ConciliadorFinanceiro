@@ -1,0 +1,59 @@
+﻿@model IEnumerable<ConciliadorFinanceiro.Base.Domain.Entities.Balanco>
+
+@{
+    ViewData["Title"] = "Balanço Mensal";
+}
+
+<h1>Balanço Mensal</h1>
+
+@if (TempData["Erro"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        Ocorreu um erro durante a execução de sua solicitação: - @TempData["Erro"]
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Dia")
+            </th>
+            <th>
+                @Html.DisplayName("Total Valor Crédito")
+            </th>
+            <th>
+                @Html.DisplayName("Total Valor Débito")
+            </th>
+            <th>
+                @Html.DisplayName("Saldo")
+            </th>
+            <th>
+                @Html.DisplayName("Fluxo de Caixa")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataBalanco)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValorTotalCredito)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValorTotalDebito)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValorSaldo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FluxoCaixa)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
