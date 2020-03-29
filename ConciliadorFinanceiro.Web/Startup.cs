@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ConciliadorFinanceiro.Base.Domain.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -31,6 +32,7 @@ namespace ConciliadorFinanceiro.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.Configure<APIConfig>(Configuration.GetSection("APIConfig"));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

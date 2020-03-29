@@ -9,13 +9,19 @@ using ConciliadorFinanceiro.Base.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace ConciliadorFinanceiro.Web.Controllers
 {
     public class BalancoController : Controller
     {
-        const string apiURI = "https://localhost:44300/api/Balanco/";
+        private readonly IOptions<APIConfig> _options;
+
+        public BalancoController(IOptions<APIConfig> options)
+        {
+            _options = options;
+        }
 
         public async Task<IActionResult> BalancoDiario()
         {
@@ -25,7 +31,7 @@ namespace ConciliadorFinanceiro.Web.Controllers
 
             using (var client = new HttpClient())
             {
-                using (var resposta = await client.GetAsync($"{apiURI}BalancoDiario?data={data:yyyy-MM-dd}"))
+                using (var resposta = await client.GetAsync($"{_options.Value.URIBalanco}BalancoDiario?data={data:yyyy-MM-dd}"))
                 {
                     if (resposta.IsSuccessStatusCode)
                     {
@@ -52,7 +58,7 @@ namespace ConciliadorFinanceiro.Web.Controllers
 
             using (var client = new HttpClient())
             {
-                using (var resposta = await client.GetAsync($"{apiURI}BalancoPeriodo?datainicio={inicioPeriodo:yyyy-MM-dd}&datafinal={finalPeriodo:yyyy-MM-dd}"))
+                using (var resposta = await client.GetAsync($"{_options.Value.URIBalanco}BalancoPeriodo?datainicio={inicioPeriodo:yyyy-MM-dd}&datafinal={finalPeriodo:yyyy-MM-dd}"))
                 {
                     if (resposta.IsSuccessStatusCode)
                     {

@@ -9,13 +9,19 @@ using ConciliadorFinanceiro.Base.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace ConciliadorFinanceiro.Web.Controllers
 {
     public class LancamentoFinanceiroController : Controller
     {
-        const string apiURI = "https://localhost:44300/api/LancamentoFinanceiro/";
+        private readonly IOptions<APIConfig> _options;
+
+        public LancamentoFinanceiroController(IOptions<APIConfig> options)
+        {
+            _options = options;
+        }
 
         #region Index
 
@@ -25,7 +31,7 @@ namespace ConciliadorFinanceiro.Web.Controllers
 
             using (var client = new HttpClient())
             {
-                using (var resposta = await client.GetAsync(apiURI))
+                using (var resposta = await client.GetAsync(_options.Value.URILancamentoFinanceiro))
                 {
                     if (resposta.IsSuccessStatusCode)
                     {
@@ -52,7 +58,7 @@ namespace ConciliadorFinanceiro.Web.Controllers
 
             using (var client = new HttpClient())
             {
-                using (var resposta = await client.GetAsync(String.Format("{0}{1}", apiURI, id)))
+                using (var resposta = await client.GetAsync(String.Format("{0}{1}", _options.Value.URILancamentoFinanceiro, id)))
                 {
                     if (resposta.IsSuccessStatusCode)
                     {
@@ -92,7 +98,7 @@ namespace ConciliadorFinanceiro.Web.Controllers
                 {
                     var json = JsonConvert.SerializeObject(lancamento);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var result = await client.PostAsync(apiURI, content);
+                    var result = await client.PostAsync(_options.Value.URILancamentoFinanceiro, content);
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -114,7 +120,7 @@ namespace ConciliadorFinanceiro.Web.Controllers
 
             using (var client = new HttpClient())
             {
-                using (var resposta = await client.GetAsync(String.Format("{0}{1}", apiURI, id)))
+                using (var resposta = await client.GetAsync(String.Format("{0}{1}", _options.Value.URILancamentoFinanceiro, id)))
                 {
                     if (resposta.IsSuccessStatusCode)
                     {
@@ -140,7 +146,7 @@ namespace ConciliadorFinanceiro.Web.Controllers
             {
                 using (var client = new HttpClient())
                 {
-                    using (var responseMessage = await client.PutAsJsonAsync(apiURI, lancamento))
+                    using (var responseMessage = await client.PutAsJsonAsync(_options.Value.URILancamentoFinanceiro, lancamento))
                     {
                         if (!responseMessage.IsSuccessStatusCode)
                         {
@@ -167,7 +173,7 @@ namespace ConciliadorFinanceiro.Web.Controllers
 
             using (var client = new HttpClient())
             {
-                using (var resposta = await client.GetAsync(String.Format("{0}{1}", apiURI, id)))
+                using (var resposta = await client.GetAsync(String.Format("{0}{1}", _options.Value.URILancamentoFinanceiro, id)))
                 {
                     if (resposta.IsSuccessStatusCode)
                     {
@@ -193,7 +199,7 @@ namespace ConciliadorFinanceiro.Web.Controllers
             {
                 using (var client = new HttpClient())
                 {
-                    using (var resposta = await client.DeleteAsync(String.Format("{0}{1}", apiURI, id)))
+                    using (var resposta = await client.DeleteAsync(String.Format("{0}{1}", _options.Value.URILancamentoFinanceiro, id)))
                     {
                         if (!resposta.IsSuccessStatusCode)
                         {
