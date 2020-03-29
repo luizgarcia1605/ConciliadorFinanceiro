@@ -81,6 +81,12 @@ namespace ConciliadorFinanceiro.Web.Controllers
 
         public async Task<ActionResult> Cadastrar()
         {
+            var tipos = from TipoLancamento t in Enum.GetValues(typeof(TipoLancamento)) select new { Id = (int)t, Tipo = t.ToString() };
+            var status = from StatusLancamento s in Enum.GetValues(typeof(StatusLancamento)) select new { Id = (int)s, Status = s.ToString() };
+
+            ViewBag.TipoId = new SelectList(tipos, "Id", "Tipo");
+            ViewBag.StatusId = new SelectList(status, "Id", "Status");
+
             return View();
         }
 
@@ -142,7 +148,7 @@ namespace ConciliadorFinanceiro.Web.Controllers
                 var lancamentos = new LancamentoFinanceiro();
                 using (var client = new HttpClient())
                 {
-                    HttpResponseMessage responseMessage = await client.PutAsJsonAsync(apiURI + id, lancamento);
+                    HttpResponseMessage responseMessage = await client.PutAsJsonAsync(apiURI, lancamento);
 
                     if (!responseMessage.IsSuccessStatusCode)
                         TempData["Erro"] = "Erro";

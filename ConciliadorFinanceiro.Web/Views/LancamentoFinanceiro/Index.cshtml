@@ -7,7 +7,7 @@
 <h1>Lançamentos financeiros</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Novo lançamento</a>
+    <a asp-action="Cadastrar" class="btn btn-primary">Cadastrar lançamento</a>
 </p>
 
 @if (TempData["Erro"] != null)
@@ -25,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DataHoraLancamento)
+                @Html.DisplayName("Data e Hora do Lançamento")
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Valor)
@@ -35,6 +35,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayName("Ações")
             </th>
             <th></th>
         </tr>
@@ -59,9 +62,14 @@
                     @Enum.GetName(typeof(ConciliadorFinanceiro.Base.Domain.Enums.StatusLancamento), item.Status)
                 </td>
                 <td>
-                    @Html.ActionLink("Editar", "Editar", new { id = item.Id }) |
-                    @Html.ActionLink("Detalhar", "Detalhar", new { id = item.Id }) |
-                    @Html.ActionLink("Deletar", "Deletar", new { id = item.Id })
+
+                    @Html.ActionLink("Detalhar", "Detalhar", new { id = item.Id })
+
+                    @if (item.Status != (int)ConciliadorFinanceiro.Base.Domain.Enums.StatusLancamento.Conciliado)
+                    {
+                        <text> | </text> @Html.ActionLink("Editar", "Editar", new { id = item.Id })
+                        <text> | </text> @Html.ActionLink("Deletar", "Deletar", new { id = item.Id })
+                    }
                 </td>
             </tr>
         }
