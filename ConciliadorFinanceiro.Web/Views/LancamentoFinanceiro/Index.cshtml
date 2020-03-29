@@ -7,7 +7,7 @@
 <h1>Lançamentos financeiros</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Novo lançamento</a>
 </p>
 
 @if (TempData["Erro"] != null)
@@ -53,10 +53,10 @@
                     @Html.DisplayFor(modelItem => item.Valor)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Tipo)
+                    @Enum.GetName(typeof(ConciliadorFinanceiro.Base.Domain.Enums.TipoLancamento), item.Tipo)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Status)
+                    @Enum.GetName(typeof(ConciliadorFinanceiro.Base.Domain.Enums.StatusLancamento), item.Status)
                 </td>
                 <td>
                     @Html.ActionLink("Editar", "Editar", new { id = item.Id }) |

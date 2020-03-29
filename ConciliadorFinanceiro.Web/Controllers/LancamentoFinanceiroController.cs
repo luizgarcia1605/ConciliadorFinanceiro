@@ -5,8 +5,10 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using ConciliadorFinanceiro.Base.Domain.Entities;
+using ConciliadorFinanceiro.Base.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 
 namespace ConciliadorFinanceiro.Web.Controllers
@@ -54,8 +56,14 @@ namespace ConciliadorFinanceiro.Web.Controllers
                 {
                     if (response.IsSuccessStatusCode)
                     {
-                        var jason = await response.Content.ReadAsStringAsync();
-                        lancamentos = JsonConvert.DeserializeObject<LancamentoFinanceiro>(jason);
+                        var json = await response.Content.ReadAsStringAsync();
+                        lancamentos = JsonConvert.DeserializeObject<LancamentoFinanceiro>(json);
+
+                        //var tipos = from TipoLancamento tipo in Enum.GetValues(typeof(TipoLancamento)) select new { Id = (int)tipo, Tipo = tipo.ToString() };
+                        //var statuses = from StatusLancamento status in Enum.GetValues(typeof(StatusLancamento)) select new { Id = (int)status, Status = status.ToString() };
+
+                        //ViewBag.TipoId = new SelectList(tipos, "Id", "Tipo", lancamentos.Tipo);
+                        //ViewBag.StatusId = new SelectList(statuses, "Id", "Status", lancamentos.Status);
                     }
                     else
                     {
