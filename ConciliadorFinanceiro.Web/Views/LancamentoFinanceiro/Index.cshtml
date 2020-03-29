@@ -12,9 +12,9 @@
 
 @if (TempData["Erro"] != null)
 {
-    <div class="alert alert-danger" role="alert">
-        Ops! ocorreu um erro, tente novamente!
-    </div>
+<div class="alert alert-danger" role="alert">
+    Ocorreu um erro durante a execução de sua solicitação: - @TempData["Erro"]
+</div>
 
 }
 
@@ -25,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
-                @Html.DisplayName("Data e Hora do Lançamento")
+                @Html.DisplayNameFor(model => model.DataHoraLancamento)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Valor)

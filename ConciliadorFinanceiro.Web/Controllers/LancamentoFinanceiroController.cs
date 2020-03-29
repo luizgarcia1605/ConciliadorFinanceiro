@@ -25,16 +25,16 @@ namespace ConciliadorFinanceiro.Web.Controllers
 
             using (var client = new HttpClient())
             {
-                using (var response = await client.GetAsync(apiURI))
+                using (var resposta = await client.GetAsync(apiURI))
                 {
-                    if (response.IsSuccessStatusCode)
+                    if (resposta.IsSuccessStatusCode)
                     {
-                        var json = await response.Content.ReadAsStringAsync();
+                        var json = await resposta.Content.ReadAsStringAsync();
                         lancamentos = JsonConvert.DeserializeObject<LancamentoFinanceiro[]>(json).ToList();
                     }
-                    else
+                    else if (resposta.StatusCode == System.Net.HttpStatusCode.BadRequest)
                     {
-                        TempData["Erro"] = "Erro";
+                        TempData["Erro"] = "Erro na consulta dos lançamentos cadastrados";
                     }
                 }
             }
@@ -48,45 +48,35 @@ namespace ConciliadorFinanceiro.Web.Controllers
 
         public async Task<IActionResult> Detalhar(int id)
         {
-            var lancamentos = new LancamentoFinanceiro();
+            var lancamento = new LancamentoFinanceiro();
 
             using (var client = new HttpClient())
             {
-                using (var response = await client.GetAsync(String.Format("{0}{1}", apiURI, id)))
+                using (var resposta = await client.GetAsync(String.Format("{0}{1}", apiURI, id)))
                 {
-                    if (response.IsSuccessStatusCode)
+                    if (resposta.IsSuccessStatusCode)
                     {
-                        var json = await response.Content.ReadAsStringAsync();
-                        lancamentos = JsonConvert.DeserializeObject<LancamentoFinanceiro>(json);
-
-                        //var tipos = from TipoLancamento tipo in Enum.GetValues(typeof(TipoLancamento)) select new { Id = (int)tipo, Tipo = tipo.ToString() };
-                        //var statuses = from StatusLancamento status in Enum.GetValues(typeof(StatusLancamento)) select new { Id = (int)status, Status = status.ToString() };
-
-                        //ViewBag.TipoId = new SelectList(tipos, "Id", "Tipo", lancamentos.Tipo);
-                        //ViewBag.StatusId = new SelectList(statuses, "Id", "Status", lancamentos.Status);
+                        var json = await resposta.Content.ReadAsStringAsync();
+                        lancamento = JsonConvert.DeserializeObject<LancamentoFinanceiro>(json);
                     }
                     else
                     {
-                        TempData["Erro"] = "Erro";
+                        TempData["Erro"] = "Erro na busca dos detalhes do lançamento";
+                        return RedirectToAction(nameof(Index));
                     }
                 }
             }
 
-            return View(lancamentos);
+            return View(lancamento);
         }
 
         #endregion
 
         #region Cadastrar
 
-        public async Task<ActionResult> Cadastrar()
+        public ActionResult Cadastrar()
         {
-            var tipos = from TipoLancamento t in Enum.GetValues(typeof(TipoLancamento)) select new { Id = (int)t, Tipo = t.ToString() };
-            var status = from StatusLancamento s in Enum.GetValues(typeof(StatusLancamento)) select new { Id = (int)s, Status = s.ToString() };
-
-            ViewBag.TipoId = new SelectList(tipos, "Id", "Tipo");
-            ViewBag.StatusId = new SelectList(status, "Id", "Status");
-
+            CarregaListas();
             return View();
         }
 
@@ -96,12 +86,12 @@ namespace ConciliadorFinanceiro.Web.Controllers
         {
             try
             {
-                var lancamentos = new LancamentoFinanceiro();
+                var lancamentoRetorno = new LancamentoFinanceiro();
 
                 using (var client = new HttpClient())
                 {
-                    var serializedProduto = JsonConvert.SerializeObject(lancamento);
-                    var content = new StringContent(serializedProduto, Encoding.UTF8, "application/json");
+                    var json = JsonConvert.SerializeObject(lancamento);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
                     var result = await client.PostAsync(apiURI, content);
                 }
 
@@ -109,7 +99,8 @@ namespace ConciliadorFinanceiro.Web.Controllers
             }
             catch
             {
-                return View();
+                TempData["Erro"] = "Erro no cadastro de lançamento";
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -119,25 +110,27 @@ namespace ConciliadorFinanceiro.Web.Controllers
 
         public async Task<IActionResult> Editar(int id)
         {
-            var lancamentos = new LancamentoFinanceiro();
+            var lancamento = new LancamentoFinanceiro();
 
             using (var client = new HttpClient())
             {
-                using (var response = await client.GetAsync(String.Format("{0}{1}", apiURI, id)))
+                using (var resposta = await client.GetAsync(String.Format("{0}{1}", apiURI, id)))
                 {
-                    if (response.IsSuccessStatusCode)
+                    if (resposta.IsSuccessStatusCode)
                     {
-                        var ProdutoJsonString = await response.Content.ReadAsStringAsync();
-                        lancamentos = JsonConvert.DeserializeObject<LancamentoFinanceiro>(ProdutoJsonString);
+                        var json = await resposta.Content.ReadAsStringAsync();
+                        lancamento = JsonConvert.DeserializeObject<LancamentoFinanceiro>(json);
+                        CarregaListas();
                     }
                     else
                     {
-                        TempData["Erro"] = "Erro";
+                        TempData["Erro"] = "Erro na busca do lançamento para edição";
+                        return RedirectToAction(nameof(Index));
                     }
                 }
             }
 
-            return View(lancamentos);
+            return View(lancamento);
         }
 
         [HttpPost]
@@ -145,13 +138,15 @@ namespace ConciliadorFinanceiro.Web.Controllers
         {
             try
             {
-                var lancamentos = new LancamentoFinanceiro();
                 using (var client = new HttpClient())
                 {
-                    HttpResponseMessage responseMessage = await client.PutAsJsonAsync(apiURI, lancamento);
-
-                    if (!responseMessage.IsSuccessStatusCode)
-                        TempData["Erro"] = "Erro";
+                    using (var responseMessage = await client.PutAsJsonAsync(apiURI, lancamento))
+                    {
+                        if (!responseMessage.IsSuccessStatusCode)
+                        {
+                            TempData["Erro"] = "Erro na edição do lançamento";
+                        }
+                    }
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -168,27 +163,26 @@ namespace ConciliadorFinanceiro.Web.Controllers
 
         public async Task<IActionResult> Deletar(int id)
         {
-            var lancamentos = new LancamentoFinanceiro();
+            var lancamento = new LancamentoFinanceiro();
 
             using (var client = new HttpClient())
             {
-
-                using (var response = await client.GetAsync(String.Format("{0}{1}", apiURI, id)))
+                using (var resposta = await client.GetAsync(String.Format("{0}{1}", apiURI, id)))
                 {
-                    if (response.IsSuccessStatusCode)
+                    if (resposta.IsSuccessStatusCode)
                     {
-                        var ProdutoJsonString = await response.Content.ReadAsStringAsync();
-                        lancamentos = JsonConvert.DeserializeObject<LancamentoFinanceiro>(ProdutoJsonString);
+                        var json = await resposta.Content.ReadAsStringAsync();
+                        lancamento = JsonConvert.DeserializeObject<LancamentoFinanceiro>(json);
                     }
                     else
                     {
-                        TempData["Erro"] = "Erro";
+                        TempData["Erro"] = "Erro na busca do lançamento para exclusão";
+                        return RedirectToAction(nameof(Index));
                     }
-
                 }
             }
 
-            return View(lancamentos);
+            return View(lancamento);
         }
 
         [HttpPost]
@@ -199,12 +193,13 @@ namespace ConciliadorFinanceiro.Web.Controllers
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri(apiURI);
-                    HttpResponseMessage responseMessage = await
-                                    client.DeleteAsync(String.Format("{0}{1}", apiURI, id));
-
-                    if (!responseMessage.IsSuccessStatusCode)
-                        TempData["Erro"] = "Erro";
+                    using (var resposta = await client.DeleteAsync(String.Format("{0}{1}", apiURI, id)))
+                    {
+                        if (!resposta.IsSuccessStatusCode)
+                        {
+                            TempData["Erro"] = "Erro na exclusão do lançamento";
+                        }
+                    }
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -213,6 +208,22 @@ namespace ConciliadorFinanceiro.Web.Controllers
             {
                 return View();
             }
+        }
+
+        #endregion
+
+        #region Listas
+
+        private void CarregaListas()
+        {
+            var tipos = from TipoLancamento t in Enum.GetValues(typeof(TipoLancamento))
+                        select new { Id = (int)t, Descricao = t.ToString() };
+
+            var status = from StatusLancamento s in Enum.GetValues(typeof(StatusLancamento))
+                         select new { Id = (int)s, Descricao = s.ToString() };
+
+            ViewBag.TipoLancamento = new SelectList(tipos, "Id", "Descricao");
+            ViewBag.StatusLancamento = new SelectList(status, "Id", "Descricao");
         }
 
         #endregion

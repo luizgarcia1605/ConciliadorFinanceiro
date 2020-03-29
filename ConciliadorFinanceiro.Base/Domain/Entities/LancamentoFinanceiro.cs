@@ -9,9 +9,11 @@ namespace ConciliadorFinanceiro.Base.Domain.Entities
         [Key]
         public int Id { get; set; }
 
+        [Display(Name = "Data e Hora do Lançamento")]
         public DateTime DataHoraLancamento { get; set; }
 
-        [RegularExpression(@"^(?<num>\d*)(?<dot>.[0-9]*)?$", ErrorMessage = "Valor informado é inválido")]
+        [DataType(DataType.Currency)]
+        [RegularExpression(@"^[1-9]*,\d{2}$", ErrorMessage = "Valor informado é inválido (#,##)")]
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public decimal Valor { get; set; }
 
