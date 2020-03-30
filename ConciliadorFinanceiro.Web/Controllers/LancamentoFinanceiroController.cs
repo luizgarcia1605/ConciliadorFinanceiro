@@ -67,7 +67,7 @@ namespace ConciliadorFinanceiro.Web.Controllers
                     }
                     else
                     {
-                        TempData["Erro"] = "Erro na busca dos detalhes do lançamento";
+                        TempData["Erro"] = "Lançamento não encontrado";
                         return RedirectToAction(nameof(Index));
                     }
                 }
