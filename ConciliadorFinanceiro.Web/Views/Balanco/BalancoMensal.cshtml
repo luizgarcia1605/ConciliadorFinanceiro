@@ -37,23 +37,46 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DataBalanco)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ValorTotalCredito)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ValorTotalDebito)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ValorSaldo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FluxoCaixa)
-                </td>
-            </tr>
+            @if (!item.Somatoria)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DataBalanco)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ValorTotalCredito)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ValorTotalDebito)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ValorSaldo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FluxoCaixa)
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr class="table-primary">
+                    <td>
+                        <span>Somatória:</span>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ValorTotalCredito)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ValorTotalDebito)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ValorSaldo)
+                    </td>
+                    <td>
+                        <span>-</span> @*@Html.DisplayFor(modelItem => item.FluxoCaixa)*@
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>

@@ -41,6 +41,18 @@ namespace ConciliadorFinanceiro.Business
                 balancoDiario.Add(balancoDia);
             }
 
+            var balancoSoma = new Balanco
+            {
+                DataBalanco = DateTime.MinValue,
+                ValorSaldo = balancoDiario.Sum(v => v.ValorSaldo),
+                ValorTotalCredito = balancoDiario.Sum(v => v.ValorTotalCredito),
+                ValorTotalDebito = balancoDiario.Sum(v => v.ValorTotalDebito),
+                FluxoCaixa = saldoAnterior,
+                Somatoria = true,
+            };
+
+            balancoDiario.Add(balancoSoma);
+
             return await Task.FromResult(balancoDiario);
         }
 
@@ -64,6 +76,8 @@ namespace ConciliadorFinanceiro.Business
                 saldoAnterior += balanco.ValorSaldo;
                 balanco.FluxoCaixa = saldoAnterior;
             }
+
+            balancosDiarios.Last().Somatoria = true;
 
             return await Task.FromResult(balancosDiarios);
         }

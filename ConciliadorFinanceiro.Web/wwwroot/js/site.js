@@ -9,21 +9,3 @@ $.validator.methods.date = function (value, element) {
     var date = value.split("/");
     return this.optional(element) || !/Invalid|NaN/.test(new Date(date[2], date[1], date[0]).toString());
 }
-
-function PesquisarLancamentoPorId() {
-
-    var idtxt = document.getElementById('txtPesquisar').value;
-
-    debugger;
-    $.ajax({
-        url: "/LancamentoFinanceiro/Detalhar/" + idtxt,
-        type: "GET",
-        dataType: 'html',
-        success: function () { },
-        error: function (xhr) {
-            console.log(xhr);
-        }
-    });
-
-    window.location.href = "/LancamentoFinanceiro/Detalhar/" + document.getElementById('txtPesquisar').value;
-};

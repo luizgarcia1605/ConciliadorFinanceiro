@@ -18,5 +18,7 @@ namespace ConciliadorFinanceiro.Base.Domain.Entities
 
         [DataType(DataType.Currency)]
         public decimal FluxoCaixa { get; set; }
+
+        public bool Somatoria { get; set; }
     }
 }

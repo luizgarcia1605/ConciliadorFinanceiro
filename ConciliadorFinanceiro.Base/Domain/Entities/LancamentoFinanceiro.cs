@@ -13,7 +13,6 @@ namespace ConciliadorFinanceiro.Base.Domain.Entities
         public DateTime DataHoraLancamento { get; set; }
 
         [DataType(DataType.Currency)]
-        [RegularExpression(@"^[1-9]*,\d{2}$", ErrorMessage = "Valor informado é inválido (#,##)")]
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public decimal Valor { get; set; }
 
